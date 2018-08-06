@@ -1,0 +1,40 @@
+/**
+ * @file
+ * @brief @PROJECT_NAME@ Version Info
+ * @author Richard Rzeszutek
+ * @date June 24, 2018
+ */
+#ifndef @PROJECT_NAME@_VERSION_H_
+#define @PROJECT_NAME@_VERSION_H_
+
+#include <string>
+
+namespace @PROJECT_NAME@ {
+
+/**
+ * @brief Library version information.
+ *
+ * The Version struct provides the version number for the @PROJECT_NAME@ library.
+ * The values are filled in at build time and follows the [semver](https://semver.org/)
+ * convention.
+ */
+struct Version
+{
+    static constexpr int major = @PROJECT_VERSION_MAJOR@;   ///< Major version number
+    static constexpr int minor = @PROJECT_VERSION_MINOR@;   ///< Minor version number
+    static constexpr int patch = @PROJECT_VERSION_PATCH@;   ///< Patch number
+
+    /**
+     * @brief Return the version in "major.minor.patch" format.
+     */
+    static std::string ToString();
+
+    Version() = delete;
+    Version(const Version &) = delete;
+    void operator=(const Version &) = delete;
+    void operator=(Version &&) = delete;
+};
+
+}
+
+#endif // @PROJECT_NAME@_VERSION_H_

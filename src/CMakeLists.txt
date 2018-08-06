@@ -1,0 +1,5 @@
+add_subdirectory(chromavec)
+add_subdirectory(test)
+if(CHROMAVEC_BUILD_APPS)
+    add_subdirectory(bin)
+endif()

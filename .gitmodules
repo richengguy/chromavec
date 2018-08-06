@@ -1,0 +1,7 @@
+[submodule "extern/CLI11"]
+	path = extern/CLI11
+	url = https://github.com/CLIUtils/CLI11.git
+[submodule "extern/tbb"]
+	path = extern/tbb
+	url = https://github.com/01org/tbb
+	ignore = untracked
