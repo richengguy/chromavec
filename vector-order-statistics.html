@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Vector Order Statistics &mdash; chromavec 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Colour Gradients" href="colour-gradients.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> chromavec
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vector Order Statistics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#convolution-based-filtering">Convolution-based Filtering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#colours-as-vectors">Colours as Vectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ordering-vectors">Ordering Vectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filtering-with-vectors">Filtering with Vectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vector-median">Vector Median</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vector-range">Vector Range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-vector-dispersion">Minimum Vector Dispersion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-next">What’s Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colour-gradients.html">Colour Gradients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">chromavec</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Vector Order Statistics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/vector-order-statistics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vector-order-statistics">
+<h1>Vector Order Statistics<a class="headerlink" href="#vector-order-statistics" title="Permalink to this headline">¶</a></h1>
+<p>This section will look at colour image filtering using a technique known as
+vector order statistics.  This is what was done by Lukac et al. <a class="reference internal" href="references.html#lukac2005" id="id1">[lukac2005]</a> in
+their work on colour image filtering.  However, before talking about that, we’ll
+take a little bit of time to discuss how “normal” filtering is done (i.e.
+convolution or kernel filtering) to provide something to compare against.  After
+that, we can look at how explicitly adding in colour information changes things.</p>
+<div class="section" id="convolution-based-filtering">
+<h2>Convolution-based Filtering<a class="headerlink" href="#convolution-based-filtering" title="Permalink to this headline">¶</a></h2>
+<p>The most basic type of image filtering, ones that don’t just brighten or darken
+pixel values, are based on the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Convolution">convolution operator</a>.  While the
+underlying theory is quite deep, the basic idea is really simple: it’s a
+weighted, moving average.  That’s it.  In fact, the mathematical expression for
+<em>any</em> convolution is <a class="footnote-reference" href="#f1" id="id2">[1]</a> <a class="footnote-reference" href="#f2" id="id3">[2]</a></p>
+<div class="math notranslate nohighlight">
+\[I[x,y] * h[i,j] = \sum_{i=-w}^{w} \sum_{j=-h}^{h} I[i - x, j - y] h[i, j].\]</div>
+<p>What this tells us is that for any pixel at <span class="math notranslate nohighlight">\([x,y]\)</span>, we take the weighted
+average in some window around that pixel.  To keep things simple, assume that
+the window is <span class="math notranslate nohighlight">\(2w + 1\)</span> pixels wide and <span class="math notranslate nohighlight">\(2h + 1\)</span> pixels tall.</p>
+<p>A whole range of filters <a class="footnote-reference" href="#f3" id="id4">[3]</a> can be implemented just by carefully choosing
+the values of <span class="math notranslate nohighlight">\(h[i,j]\)</span>.  For example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}h[i,j] = \begin{bmatrix}
+    \frac{1}{3} &amp; \frac{1}{3} &amp; \frac{1}{3} \\
+    \frac{1}{3} &amp; \frac{1}{3} &amp; \frac{1}{3} \\
+    \frac{1}{3} &amp; \frac{1}{3} &amp; \frac{1}{3}
+\end{bmatrix}\end{split}\]</div>
+<p>is a 3x3 moving average box (blur) filter while</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}h[i,j] = \begin{bmatrix}
+     0 &amp; -1  &amp;  0 \\
+    -1 &amp;  4  &amp; -1 \\
+     0 &amp; -1  &amp;  0
+\end{bmatrix}\end{split}\]</div>
+<p>is a <a class="reference external" href="https://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm">Laplacian filter</a>.
+Blurring filters are created by making all of the values in <span class="math notranslate nohighlight">\(h[i,j]\)</span> add
+up to one while edge detectors (usually) have the values add up to zero.</p>
+<p>Filtering greyscale images is basically applying the convolution equation onto
+the image directly.  When working with colour images, the same operation
+is applied onto the red, green and blue colours independently.  This is because
+the image is being treated as three <em>separate</em> images.  This makes sense for
+blurring since you intuitively expect that a blur will affect each colour in the
+exact same way.  If it doesn’t then you start getting artifacts around colour
+transitions.</p>
+<p>Things are a bit different if you’re trying to detect transistions (edges) in an
+image.  The three “images” inside of a colour images are very similar but not
+<em>identical</em>.  This bit is crucial to remember because a transition in the red
+channel doesn’t necessarily exist in the blue channel.  For example, pure yellow
+is <span class="math notranslate nohighlight">\((255, 255, 0)\)</span>.  A yellow-red edge would appear as</p>
+<div class="math notranslate nohighlight">
+\[\underbrace{(255, 255, 0)}_{\mathrm{yellow}}
+\to
+\underbrace{(255, 0, 0)}_{\mathrm{red}} =
+\underbrace{(0, -255, 0)}_{\mathrm{difference}}\]</div>
+<p>when looking at the pixel values.  Only the green value changes, dropping from
+255 to 0 across the edge.  It’s clear that there’s a change but it’s harder to
+intepret then if it was just a single value.  Why is this the case?</p>
+<p>Well, let’s look at the following 3x3 grid:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 255 \\
+    \hline
+    0 &amp; 0 &amp; 255 \\
+    \hline
+    0 &amp; 0 &amp; 255 \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>The left side is black and the right side is white.  That means that if you
+used the following filter <span class="math notranslate nohighlight">\(h[i,j] = \begin{bmatrix} 1 &amp; -1 &amp; 0 \end{bmatrix}\)</span>
+then the output <a class="footnote-reference" href="#f4" id="id5">[4]</a> will be</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>The jump in the middle is pretty obvious.  Now, let’s repeat that with the
+red-yellow edge from before.  The input grid looks like</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    (255, 255, 0) &amp; (255, 255, 0) &amp; (255, 0, 0) \\
+    \hline
+    (255, 255, 0) &amp; (255, 255, 0) &amp; (255, 0, 0) \\
+    \hline
+    (255, 255, 0) &amp; (255, 255, 0) &amp; (255, 0, 0) \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>and the output is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    (0, 0, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, 0, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, 0, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>Now, just looking at the grid, it’s obvious there’s a jump.  It’s clear that
+“nothing happens” in the left and right rows.  The middle one is the interesting
+one.  However, we can’t get that by looking at a single value.  We have to
+consider all three values <em>together</em>.  This is where the “vector” in “vector
+order statistics” comes in.</p>
+</div>
+<div class="section" id="colours-as-vectors">
+<h2>Colours as Vectors<a class="headerlink" href="#colours-as-vectors" title="Permalink to this headline">¶</a></h2>
+<p>This idea is pretty simple and actually how colour spaces are defined.  In a
+vector-based colour model, each primary colour is a direction in the colour
+space.  For the RGB colour space, the colours (conveniently) form a 3D cube
+where any particular <span class="math notranslate nohighlight">\((R, G, B)\)</span> triplet <a class="footnote-reference" href="#f5" id="id6">[5]</a> is a coordinate somewhere
+inside that cube.</p>
+<div class="figure" id="id8">
+<img alt="_images/RGB_Cube_Show_lowgamma_cutout_b.png" src="_images/RGB_Cube_Show_lowgamma_cutout_b.png" />
+<p class="caption"><span class="caption-text">Example of an RGB colour cube.  Image by SharkD and obtained from
+<a class="reference external" href="https://commons.wikimedia.org/wiki/File:RGB_Cube_Show_lowgamma_cutout_b.png">Wikimedia Commons</a>
+under a [CC BY-SA 3.0  (<a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0">https://creativecommons.org/licenses/by-sa/3.0</a>)]
+licence.</span></p>
+</div>
+<p>More formally, a greyscale image is a <strong>scalar</strong>-valued function while a colour
+image is a <strong>vector</strong>-valued function.  We can still define basic mathematical
+operations on vector-valued functions, i.e. addition and subtraction, but we
+also lose a few things, like the notion of something being “less than” or
+“greater than” something else.  But, the good news is that we still keep the
+notion of whether or not two colours are the same.</p>
+<p>While there are many, many ways to define how “close” two vectors are, the two
+that we’ll focus on are the Euclidean and Euclidean-squared distances.  The
+Euclidean distance between two colours, <span class="math notranslate nohighlight">\(\vec{c}_1\)</span> and <span class="math notranslate nohighlight">\(\vec{c}_2\)</span>,
+is just the Pythagorean equation</p>
+<div class="math notranslate nohighlight">
+\[d(\vec{c}_1, \vec{c}_2) = \sqrt{(R_1 - R_2)^2 + (G_1 - G_2)^2 + (B_1 - B_2)^2}\]</div>
+<p>while the Euclidean-squared distance is, unsurprisingly, that value squared, i.e.</p>
+<div class="math notranslate nohighlight">
+\[d^2(\vec{c}_1, \vec{c}_2) = (R_1 - R_2)^2 + (G_1 - G_2)^2 + (B_1 - B_2)^2.\]</div>
+<p>You can also take the “distance” of a vector on its own.  This is known as a
+vector norm and, actually, the distances are just vector norms of the
+<em>differences</em> between vectors.</p>
+<p>Why define the Euclidean-squared distance/norm?  It’s mainly a math trick (kind
+of). Basically, if <span class="math notranslate nohighlight">\(d(\vec{c}_1) &lt; d(\vec{c}_2)\)</span> then
+<span class="math notranslate nohighlight">\(d^2(\vec{c}_1) &lt; d^2(\vec{c}_2)\)</span>.  The relative ordering is preserved and
+is a lot easier to calculate than the Euclidean-squared norm than the
+Euclidean-norm. The square-root also has some unpleasant side-effects but that’s
+not as important in this application.</p>
+</div>
+<div class="section" id="ordering-vectors">
+<h2>Ordering Vectors<a class="headerlink" href="#ordering-vectors" title="Permalink to this headline">¶</a></h2>
+<p>Okay, so we’ve talked about window-based (convolution) filtering and then
+colours as vectors.  The next part is doing something with that information. One
+way to use colour vectors directly is through order statistics.  Order
+statistics are things like medians or minimum and maximum.  Basically, you take
+a list, sort the values from smallest to largest and then see where certain
+things fall. This tells you, for example, what’s the most commonly occurring
+value.</p>
+<p>It isn’t immediately obvious how to do this with vectors.  After all, how is
+one vector “less than” another?  You can take its norm but an infinite number of
+very different vectors have the same norm.  Well, one way, as this is what
+Lukac et al. did, is to rank colours by their <strong>aggregate distances</strong>.  Again,
+given some window around a pixel, the aggregate distance for any pixel <em>in</em> that
+window is</p>
+<div class="math notranslate nohighlight">
+\[D_i = \sum_j d(\vec{c}_i, \vec{c}_j).\]</div>
+<p>Okay, so that’s not exact that intuitive.  The equation is a bit dense but when
+you draw it out, it becomes a bit more obvious what’s going on.  Consider that
+you have the following groups like what’s shown in the image below.</p>
+<div class="figure" id="id9">
+<img alt="_images/aggr-dist.png" src="_images/aggr-dist.png" />
+<p class="caption"><span class="caption-text">Example of aggregate distances.</span></p>
+</div>
+<p>What the equation calculates is how <em>central</em> a particular point is to all other
+points.  When you calculate an aggregate distance, what you’re actually doing is
+figuring out how similar a point is to all other points.  The more similar it
+is, the lower its aggregate distance.  When you generate and then sort a list of
+these aggregate distances what you’ll get are all of the most similar colours at
+one end and the most dissimilar colours at the other end.</p>
+</div>
+<div class="section" id="filtering-with-vectors">
+<h2>Filtering with Vectors<a class="headerlink" href="#filtering-with-vectors" title="Permalink to this headline">¶</a></h2>
+<p>Once you can rank vectors, you can now <em>filter</em> the vectors.  This is how Lukac
+et al. create their colour image filters.  They assume that you can define a
+distance between colours and then use that to rank colours from “most central”
+to “least central.  So, for the rest of the section, given a window</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{W} = \left\{\vec{c}_0, \vec{c}_1, \dots, \vec{c}_{N-1} \right\},\]</div>
+<p>assume that the colours have already been sorted so that</p>
+<div class="math notranslate nohighlight">
+\[D_0 &lt; D_1 &lt; \cdots &lt; D_{N-1}.\]</div>
+<div class="section" id="vector-median">
+<h3>Vector Median<a class="headerlink" href="#vector-median" title="Permalink to this headline">¶</a></h3>
+<p>The easiest filter to understand is the vector median filter.  This filter is a
+type of noise reduction (i.e. blur) filter that tries to remove “unlikely”
+colours based on what’s around it.  The underlying assumption is that most parts
+of an image are “flat” and that they don’t change all that much.  Sure, there
+are edges but if you zoom in then in a 3x3, or 5x5 neighbourhood, the image will
+look pretty much the same.  Or, put another way, it is locally homogeneous.</p>
+<p>To that end, you can create a filter that just picks the colour with the
+smallest aggregate distance, i.e.</p>
+<div class="math notranslate nohighlight">
+\[\vec{c} = \vec{c}_0.\]</div>
+<p>The reason why this is called the vector <em>median</em> is because if you take the
+median of a bunch of numbers then what you get is the most occurring value.
+And, because it acts like a median filter, it means that it will remove noise
+(small colour fluctuations) while preserving large jumps.</p>
+<div class="figure" id="id10">
+<a class="reference internal image-reference" href="_images/example.jpg"><img alt="_images/example.jpg" src="_images/example.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Input image.</span></p>
+</div>
+<div class="figure" id="id11">
+<a class="reference internal image-reference" href="_images/vmf-output.jpg"><img alt="_images/vmf-output.jpg" src="_images/vmf-output.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Output of the vector median filter with a 5x5 window.</span></p>
+</div>
+</div>
+<div class="section" id="vector-range">
+<h3>Vector Range<a class="headerlink" href="#vector-range" title="Permalink to this headline">¶</a></h3>
+<p>The vector range filter is defined as</p>
+<div class="math notranslate nohighlight">
+\[r = d(\vec{c}_{0}, \vec{c}_{N-1})\]</div>
+<p>which is just the distance between the most and least central vectors.  At
+first, it’s not obvious what it’s doing.  But, consider what exactly the first
+and last colours in that sorted list represent.</p>
+<p>If the colours are all almost the same then the norm between the first and last
+elements will be very small.  However, if there are multiple colours, which is
+what happens along an edge, then this value gets larger.  That means that the
+filter has a value close to zero when not near an edge and a non-zero value when
+along an edge.  Which means that the vector range filter detects where an edge
+is!  In fact, this is what the vector range filter is; it’s a type of edge
+detector.</p>
+<div class="figure" id="id12">
+<a class="reference internal image-reference" href="_images/example.jpg"><img alt="_images/example.jpg" src="_images/example.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Input image.</span></p>
+</div>
+<div class="figure" id="id13">
+<a class="reference internal image-reference" href="_images/vr-output.jpg"><img alt="_images/vr-output.jpg" src="_images/vr-output.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Output of the vector range filter with a 5x5 window.</span></p>
+</div>
+</div>
+<div class="section" id="minimum-vector-dispersion">
+<h3>Minimum Vector Dispersion<a class="headerlink" href="#minimum-vector-dispersion" title="Permalink to this headline">¶</a></h3>
+<p>The minimum vector dispersion filter (MVDF) is a combination noise reduction
+filter and edge detector.  The problem with pure edge detectors is that they’re
+very sensitive to noise.  This is just a result of creating a filter that
+detects transitions.  One way to combat this is to merge an edge detector with
+a blurring filter <a class="footnote-reference" href="#f6" id="id7">[6]</a>.</p>
+<p>The MVDF is defined as</p>
+<div class="math notranslate nohighlight">
+\[r = \min_j d \left(\vec{c}_{N-j}, \sum_{i=0}^{l-1} \frac{\vec{c}_i}{l} \right),\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[j \in \left\{ 0, 1, \dots, k \right\}, k, l &lt; N.\]</div>
+<p>That’s a fair bit to take in so let’s break it down a bit.  First, the</p>
+<div class="math notranslate nohighlight">
+\[\sum_{i=0}^{l-1} \frac{\vec{c}_i}{l}\]</div>
+<p>term is the average colour of the <span class="math notranslate nohighlight">\(l\)</span>-most similar colours.  This is a
+blurring operation because, well, you’re taking the average of a set of colours.
+This means that even if there are some small fluctations they’ll get averaged
+out.  If you set <span class="math notranslate nohighlight">\(l=0\)</span> then this is just the vector median filter.</p>
+<p>Next is the</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\min_j d \left(\vec{c}_{N-j}, \cdot \right),\\j \in \left\{ 0, 1, \dots, k \right\}\end{aligned}\end{align} \]</div>
+<p>What this says is that we’re going to look at the <span class="math notranslate nohighlight">\(k\)</span>-least similar
+colours and then take the smallest of those distances.  The idea is that the
+very last entry may be noise, so we want to ignore it if it is.  The result is
+a filter that does a little bit of blurring and then tries to reject any noise
+when computing the distances.  This is still an edge detector but the blurring
+action means that it produces smoother edges and is less effected by noise.</p>
+<div class="figure" id="id14">
+<a class="reference internal image-reference" href="_images/example.jpg"><img alt="_images/example.jpg" src="_images/example.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Input image.</span></p>
+</div>
+<div class="figure" id="id15">
+<a class="reference internal image-reference" href="_images/mvdf-output.jpg"><img alt="_images/mvdf-output.jpg" src="_images/mvdf-output.jpg" style="width: 458.5px; height: 310.0px;" /></a>
+<p class="caption"><span class="caption-text">Output of the minimum vector dispersion filter where <span class="math notranslate nohighlight">\(k=4\)</span>,
+<span class="math notranslate nohighlight">\(l=3\)</span> and the window size was 5x5.</span></p>
+</div>
+</div>
+</div>
+<div class="section" id="what-s-next">
+<h2>What’s Next<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
+<p>Next, we’ll look at how we can take this sort of thinking and modify an existing
+edge detection algorithm so that it’s “colour-aware”.  As it turns out, that’s
+not actually all that difficult once you start thinking about what it means to
+find the colour distances.  We’ll look at defining <a class="reference internal" href="colour-gradients.html"><span class="doc">Colour Gradients</span></a> using
+vector magnitudes rather than approximations to derivatives.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>When talking about convolution, the convention is to represent it using
+the <span class="math notranslate nohighlight">\(*\)</span> symbol.  It can be a little bit confusing since that’s
+also the multiplication symbol.  For…reasons…convolution has
+properties that make it similar to a scalar-multiplication operation.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>If you go to the Wikipedia article, it talks about convolution on
+<em>continuous</em> functions.  That means you do integration.  Because images
+are <em>discrete</em> functions (2D sequences), then you do summations because
+it’s the analogue to integration.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>A good example of different filter kernals can be found on the
+Wikipedia <a class="reference external" href="https://en.wikipedia.org/wiki/Digital_image_processing#Filtering">Digital Image Processing</a>
+page.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td>There are a variety of ways to handle the borders of an image.  One
+way, which usually works for visual effects, is to assume that the
+edges are replicated, so the border value just extends indefinitely.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[5]</a></td><td>The RGB colour space is actually <em>horrible</em> for a lot of colour-based
+processing because it isn’t perceptually uniform.  That means that
+colours don’t behave the way you expect them to when in RGB space.
+A lot of algorithms will switch colour spaces, for example, to
+<a class="reference external" href="https://en.wikipedia.org/wiki/CIELAB_color_space">CIE Lab</a>, to get
+around this problem.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[6]</a></td><td>Edge detectors are a form of high-pass filter, which means that they
+allow in high-frequency signals.  Normally noise has high frequencies
+compared to the signal of interest.  A blur filter is a type of
+low-pass filter, which means that it can, usually, reject noise.  When
+you combine the two filters you end up with a band-pass filter that
+allows frequencies within a certain frequency band, or bandwidth.  By
+tuning the filter, you can select which frequencies you are interested
+in and which ones to reject.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="colour-gradients.html" class="btn btn-neutral float-right" title="Colour Gradients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Richard Rzeszutek.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

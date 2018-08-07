@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; chromavec 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Vector Order Statistics" href="vector-order-statistics.html" />
+    <link rel="prev" title="Colour Edge Filtering" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> chromavec
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pixel-values">Pixel Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#from-colour-to-greyscale">From Colour to Greyscale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#when-things-break">When Things Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-we-do">What can we do?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vector-order-statistics.html">Vector Order Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colour-gradients.html">Colour Gradients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">chromavec</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>When dealing with colour images, many image processing operations assume that
+the colour channels can be either a) processed independently or b) converted
+into greyscale.  Basically, the assumption is that an image is either black and
+white or that it can be treated as three separate black and white images.  For a
+lot of operations, this is actually pretty reasonable.  For example, when you’re
+blurring an image, the underlying math doesn’t care if an image is colour or
+greyscale.  Things start breaking down when the math <em>does</em> care.</p>
+<div class="section" id="pixel-values">
+<h2>Pixel Values<a class="headerlink" href="#pixel-values" title="Permalink to this headline">¶</a></h2>
+<p>A digital image is essentially a <span class="math notranslate nohighlight">\(\mathrm{height}\times\mathrm{width}\)</span>
+grid where each element <span class="math notranslate nohighlight">\(I[x,y]\)</span> contains a <em>single</em> value.  For a
+greyscale image, each cell contains only a single value.  In most cases <a class="footnote-reference" href="#f1" id="id1">[1]</a>
+the image values range between 0 and 255 in discrete steps.  That’s because
+for 8-bit images, the maximum possible value is <span class="math notranslate nohighlight">\(2^8-1 = 255\)</span>.</p>
+<p>Things are a little bit different for colour images because each pixel now has
+<em>multiple</em> values associated with it.  The easiest way to think about it is that
+a typical red, green and blue (RGB) image are three separate images joined
+together.  That means that each pixel at position <span class="math notranslate nohighlight">\([x,y]\)</span> contains a
+<em>triplet</em> instead of just one value.  So, a bit more formally, a greyscale image
+is <span class="math notranslate nohighlight">\(I[x,y] = c\)</span>, where <span class="math notranslate nohighlight">\(0 \le c \le 255\)</span>.  A colour image is
+<span class="math notranslate nohighlight">\(I[x,y] = (r,g,b)\)</span> where <span class="math notranslate nohighlight">\(0 \le r, g, b \le 255\)</span>.</p>
+<p>Wikipedia provides a good overview of this on their
+<a class="reference external" href="https://en.wikipedia.org/wiki/Grayscale">Grayscale</a> page.</p>
+</div>
+<div class="section" id="from-colour-to-greyscale">
+<h2>From Colour to Greyscale<a class="headerlink" href="#from-colour-to-greyscale" title="Permalink to this headline">¶</a></h2>
+<p>Okay, so that still doesn’t answer the question, “why do we care?”  The short
+answer is that sometimes we want to be able to compare different parts of the
+same image.  We usually do this by looking at pixel values and seeing the
+difference between a pixel at <span class="math notranslate nohighlight">\([x_1, y_1]\)</span> with a pixel at
+<span class="math notranslate nohighlight">\([x_2, y_2]\)</span>.</p>
+<p>Things get a
+bit more interesting when you consider how an RGB image becomes a greyscale
+image.  In theory, the conversion is pretty simple.  And it is.  The grey value
+of any pixel is just a weighted sum of its RGB values <a class="footnote-reference" href="#f2" id="id2">[2]</a>.  The default in
+OpenCV <a class="footnote-reference" href="#f3" id="id3">[3]</a> uses weights that preserve the relative “brightness” of the
+colours and is given by</p>
+<div class="math notranslate nohighlight">
+\[Y = 0.299R + 0.587G + 0.114B.\]</div>
+<p>The reason why this variable is labelled <span class="math notranslate nohighlight">\(Y\)</span> is because it comes from the
+YUV/YCbCr colour representations.</p>
+<p>Anyway, the key thing is that a colour to grey conversion is a dot-product
+between two vectors.  Or, put another way, the projection of a 3D vector space
+onto a 1D subspace.  Or, minus the math-speak, taking three separate values and
+reducing it into a single value.  However you put it, you’re taking a bunch of
+numbers and turning it into a single number.  By definition, you’re loosing some
+information, and this is where weird things start happening.</p>
+</div>
+<div class="section" id="when-things-break">
+<h2>When Things Break<a class="headerlink" href="#when-things-break" title="Permalink to this headline">¶</a></h2>
+<p>Consider this image:</p>
+<div class="figure" id="id7">
+<img alt="_images/test.png" src="_images/test.png" />
+<p class="caption"><span class="caption-text">An image with red on the left side, green on the right side.</span></p>
+</div>
+<p>One side of it is a dark red and the otherside is a dark green.  There’s an
+edge running right down the middle of it.  Now, consider loading that image and
+converting into greyscale using the following code example:</p>
+<div class="highlight-cpp notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;opencv2/imgproc.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;opencv2/imgcodec.hpp&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">nargs</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">img</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">grey</span><span class="p">;</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">grey</span><span class="p">,</span> <span class="n">CV_BGR2GRAY</span><span class="p">);</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">imwrite</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">grey</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The output is this image:</p>
+<div class="figure" id="id8">
+<img alt="_images/greyscale.png" src="_images/greyscale.png" />
+<p class="caption"><span class="caption-text">Resulting greyscale image.</span></p>
+</div>
+<p>That’s not a glitch.  Everything’s working exactly as it’s supposed to.  It’s
+just that the red and green values were chosen so that after converting to
+greyscale, you get the exact same grey value.</p>
+<p>So, what happened?  Well, let’s set the blue value to zero.  That means that we
+just need to worry about the red and green values.  This also lets the colour
+to greyscale equation become</p>
+<div class="math notranslate nohighlight">
+\[Y = 0.299R + 0.587G.\]</div>
+<p>What we want to do is now figure what values of <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(G\)</span> will
+give us the exact same value of <span class="math notranslate nohighlight">\(Y\)</span>.  To do this, processing algorithms are essentially colour blind?we need to see what’s
+the largest value that <span class="math notranslate nohighlight">\(Y\)</span> can have.  For a reason that will become
+(hopefully) obvious shortly, the largest value of <span class="math notranslate nohighlight">\(Y\)</span> that can be made
+from red and green is</p>
+<div class="math notranslate nohighlight">
+\[Y = \lfloor 0.299*255 \rfloor = 76.\]</div>
+<p>So, we need to produce a value of 76.  Figuring out what the red and green
+values will need to be can be done by solving a system of simultaneous
+equations.  We set it up like so:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}76 &amp;= 0.299*R_1 + 0.587*G_1\\76 &amp;= 0.299*R_2 + 0.587*G_2\end{aligned}\end{align} \]</div>
+<p>To keep things simple(r), let <span class="math notranslate nohighlight">\(R_1 = 0\)</span> and <span class="math notranslate nohighlight">\(G_2 = 0\)</span>.  That means
+that</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}76 &amp;= 0.587*G_1\\76 &amp;= 0.299*R_2\end{aligned}\end{align} \]</div>
+<p>Finding the values is just a matter of dividing 76 by the appropriate value and
+then rounding <em>down</em>.  In other words,</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}G_1 = \left \lfloor \frac{76}{0.587} \right \rfloor = 129\\R_2 = \left \lfloor \frac{76}{0.299} \right \rfloor = 254\end{aligned}\end{align} \]</div>
+<p>Now, the reason for choosing <span class="math notranslate nohighlight">\(Y=76\)</span> should be a bit more apparent.  The
+colour values have to be between 0 and 255 (or some predefined maximum value) so
+choosing the <em>larger</em> of the two would mean that <span class="math notranslate nohighlight">\(R_2 = 500\)</span> <a class="footnote-reference" href="#f4" id="id4">[4]</a>.</p>
+</div>
+<div class="section" id="what-can-we-do">
+<h2>What can we do?<a class="headerlink" href="#what-can-we-do" title="Permalink to this headline">¶</a></h2>
+<p>Okay, so by now it should be obvious that converting an RGB image into a
+greyscale image has…problems.  Does that mean that things are hopeless?  That
+we just have to accept the ambiguities that come when converting to greyscale?
+Well, no, we don’t.  And the fact is that dealing with colour isn’t particularly
+difficult.</p>
+<p>The rest of this document/website will discuss one way to use colour information
+to find image edges.  There are others and it’s a topic that has been studied a
+fair bit.  This project was primarily inspired by the work of Lukac et al. on
+colour image filtering using vector order statistics <a class="reference internal" href="references.html#lukac2005" id="id5">[lukac2005]</a>.  The section
+on <a class="reference internal" href="colour-gradients.html"><span class="doc">Colour Gradients</span></a> is closely related to the work by <a class="reference internal" href="references.html#scharcanski1997" id="id6">[scharcanski1997]</a>,
+which also has some basis in vector order statistics. There are other
+approaches, including ones based more on calculus then on statistics, but those
+won’t be discussed here.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Actually, that’s not quite true since the maximum value depends on a
+number of things, such as how the image was captured and stored.  A
+good example are RAW images: the pixel values will be between 0 and
+whatever the maximum bit-depth used by the camera’s sensor.  Images can
+also be represented using floating-point numbers and in that case they
+usually are between 0 and 1.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>The way that you choose the weights can have an effect on how the final
+greyscale image appears.  That’s what the adjustment sliders in
+<a class="reference external" href="https://helpx.adobe.com/ca/lightroom/how-to/convert-photo-black-white.html">Adobe Lightroom</a>
+do, for example, in their “black &amp; white” panel.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>See the “RGB &lt;–&gt; GRAY” section in the
+<a class="reference external" href="https://docs.opencv.org/3.4.2/de/d25/imgproc_color_conversions.html">Color Conversion</a>
+in the OpenCV documentation.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>Proving this is left as an exercise for the reader.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="vector-order-statistics.html" class="btn btn-neutral float-right" title="Vector Order Statistics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Colour Edge Filtering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Richard Rzeszutek.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

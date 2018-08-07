@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Colour Gradients &mdash; chromavec 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Vector Order Statistics" href="vector-order-statistics.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> chromavec
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector-order-statistics.html">Vector Order Statistics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Colour Gradients</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gradients-101">Gradients 101</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-example">Simple Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direction-and-magnitude">Direction and Magnitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#canny-style-edge-detection">Canny-style Edge Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-colour">Working with Colour</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#another-example">Another Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colour-angles">Colour Angles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#closing-the-loop">Closing the Loop</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-methods">Other Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">chromavec</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Colour Gradients</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/colour-gradients.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="colour-gradients">
+<h1>Colour Gradients<a class="headerlink" href="#colour-gradients" title="Permalink to this headline">¶</a></h1>
+<p>Something that we “lose” when moving to colour is the notion of image gradients.
+Gradients tell us how much something is changing and the direction in which its
+changing.  The actual concept comes from calculus and this is what you usually
+see applied in image processing when discussing image gradients.  The purpose
+of this section is to describe how you can construct gradients (sort of) for
+colour images that can then be used with pre-existing edge detectors, such as
+the <a class="reference external" href="https://en.wikipedia.org/wiki/Canny_edge_detector">Canny edge detector</a>
+<a class="reference internal" href="references.html#canny1986" id="id1">[canny1986]</a>.</p>
+<p>I’ll also note that the contents of this section are based off of the work of
+Scharcanski and Venetsanopolous <a class="reference internal" href="references.html#scharcanski1997" id="id2">[scharcanski1997]</a>.  The main difference is that
+it has a few simplifications to (hopefully) make <em>understanding</em> what’s going on
+a bit easier.  It also handles the gradient angle estimation a bit differently.
+Anyway, the point is that you can greyscale-style filtering with colour images
+with only a few simple tweaks to the original algorithm.</p>
+<div class="section" id="gradients-101">
+<h2>Gradients 101<a class="headerlink" href="#gradients-101" title="Permalink to this headline">¶</a></h2>
+<p>First, let’s go over what we mean by “image gradients”, starting from first
+principles whenever possible.  Unfortunately, especially in academic literature,
+this tends to be described using the language of calculus which can appear a bit
+dense at times.  Let’s avoid that for the time being and just look at what’s
+actually going on with images before introducing any calculus.</p>
+<div class="section" id="simple-example">
+<h3>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h3>
+<p>Let’s start off with a simple example consisting of a 3x3 “image”, like the one
+below:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    255 &amp; 255 &amp; 255 \\
+    \hline
+    0 &amp; 0 &amp; 255 \\
+    \hline
+    0 &amp; 0 &amp; 255 \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>This is pretty similar to the example from the
+<a class="reference internal" href="vector-order-statistics.html"><span class="doc">previous section</span></a>.  In that section, there was
+the following filter kernel:</p>
+<div class="math notranslate nohighlight">
+\[h[i,j] = \begin{bmatrix} 1 &amp; -1 &amp; 0 \end{bmatrix}.\]</div>
+<p>Well, this just also happens to be the filter kernel that describes the
+<strong>forward difference</strong> of a discrete sequence.  Then for an image, horizontal
+central difference <span class="math notranslate nohighlight">\(\Delta_x I[x,y]\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\Delta_x I[x,y] = I[x+1,y] - I[x,y].\]</div>
+<p>There’s also (surprise, surprise) a corresponding vertical central difference</p>
+<div class="math notranslate nohighlight">
+\[\Delta_y I[x,y] = I[x,y+1] - I[x,y].\]</div>
+<p>If we apply the two operators onto the <em>same</em> image we’ll get <em>two</em> new images,
+which I’ll call <span class="math notranslate nohighlight">\(G_x\)</span> and <span class="math notranslate nohighlight">\(G_y\)</span> for the horizontal and vertical
+differences:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_x = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_y = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    255 &amp; 255 &amp; 0 \\
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>What exactly did that do?  Notice that <span class="math notranslate nohighlight">\(G_x\)</span> tells us where there’s a
+<em>vertical</em> transition while <span class="math notranslate nohighlight">\(G_y\)</span> does the same for horizontal
+transitions.  That means that in order to properly capture edges, we need to
+look in <em>at least</em> two directions, i.e. horizontal and vertical <a class="footnote-reference" href="#f1" id="id3">[1]</a>.</p>
+</div>
+<div class="section" id="direction-and-magnitude">
+<h3>Direction and Magnitude<a class="headerlink" href="#direction-and-magnitude" title="Permalink to this headline">¶</a></h3>
+<p>This is where the connection to calculus starts to come in.  The two images,
+<span class="math notranslate nohighlight">\(G_x\)</span> and <span class="math notranslate nohighlight">\(G_y\)</span> can be thought of, loosely <a class="footnote-reference" href="#f2" id="id4">[2]</a>, as partial
+derivatives.  It’s why some sources will use</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial I}{\partial x}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial I}{\partial y}\]</div>
+<p>to refer to <span class="math notranslate nohighlight">\(G_x\)</span> and <span class="math notranslate nohighlight">\(G_y\)</span>.  In vector calculus, the gradient, or
+direction of change, for a function <span class="math notranslate nohighlight">\(f(x,y)\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[\Delta f = \left( \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y} \right)\]</div>
+<p>So, this idea gets used in image processing to define image gradients, i.e.</p>
+<div class="math notranslate nohighlight">
+\[\Delta I = \left( G_x, G_y \right).\]</div>
+<p>That means that for a greyscale image, its gradient is a two-colour image, where
+one colour contains the horizontal gradients and the other contains the vertical
+gradients.  The strength of each edge, its magnitude, is</p>
+<div class="math notranslate nohighlight">
+\[\| \Delta I \| = \sqrt{ G_x^2 + G_y^2 }\]</div>
+<p>while the gradient angle <a class="footnote-reference" href="#f3" id="id5">[3]</a> is</p>
+<div class="math notranslate nohighlight">
+\[\angle \Delta I = \arctan\left( \frac{G_y}{G_x} \right).\]</div>
+<p>If you compute the magnitude and angles for the 3x3 example image then you
+get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\| \Delta I \| = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    255 &amp; 360 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\angle \Delta I = \begin{array}{|c|c|c|}
+    \hline
+    0^\circ &amp; 0^\circ &amp; 0^\circ \\
+    \hline
+    90^\circ &amp; 45^\circ &amp; 0^\circ \\
+    \hline
+    0^\circ &amp; 0^\circ &amp; 0^\circ \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>With this simple operation, we know a) if there’s an edge and b) which direction
+it points.  And this leads to…</p>
+</div>
+<div class="section" id="canny-style-edge-detection">
+<h3>Canny-style Edge Detection<a class="headerlink" href="#canny-style-edge-detection" title="Permalink to this headline">¶</a></h3>
+<p>The Canny edge detector <a class="reference internal" href="references.html#canny1986" id="id6">[canny1986]</a> is <strong>the</strong> edge detector in classic
+computer vision and image processing.  It does a very good job at isolating
+edges in an image and is pretty much the goto edge detector for many
+applications.  It can be broken into the following stages:</p>
+<ol class="arabic simple">
+<li>Pre-filtering (blurring) an image to remove noise.</li>
+<li>Compute the horizontal and vertical gradient images, <span class="math notranslate nohighlight">\(G_x\)</span> and
+<span class="math notranslate nohighlight">\(G_y\)</span> using an edge detection kernel.</li>
+<li>Non-maximum suppression (NMS) to set anything not right <em>on</em> a potential edge
+to zero.</li>
+<li>Hysteresis thresholding, where all candidate edges are broken into strong and
+weak edges based on their magnitudes.</li>
+<li>Connected component analysis (or equivalent) to join weak edges to strong
+edges.</li>
+</ol>
+<p>We’ll mainly focus on the second step since that’s what we need to modify to get
+the Canny edge detector working with colour.  A good introduction to the
+detector can be found at <a class="reference external" href="http://www.aishack.in">AI Shack</a>:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.aishack.in/tutorials/canny-edge-detector/">Introducing the Edge Detector</a></li>
+<li><a class="reference external" href="http://www.aishack.in/tutorials/implementing-canny-edges-scratch/">Implementing Canny Edges from scratch</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="working-with-colour">
+<h2>Working with Colour<a class="headerlink" href="#working-with-colour" title="Permalink to this headline">¶</a></h2>
+<p>As hinted, the main change that needs to be made to the Canny edge detector so
+that it works with colour is in the second step when you calculate the gradient
+directions.  The reason has to do with one particular fact about vector norms:
+they’re always positive.  That throws certain assumptions about gradient
+<em>angles</em> out the window.</p>
+<div class="section" id="another-example">
+<h3>Another Example<a class="headerlink" href="#another-example" title="Permalink to this headline">¶</a></h3>
+<p>Let’s consider the original image example except inverted (<span class="math notranslate nohighlight">\(0 \to 255\)</span> and
+vice-versa):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    255 &amp; 255 &amp; 0 \\
+    \hline
+    255 &amp; 255 &amp; 0 \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>That means the gradient images are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_x = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    0 &amp; -255 &amp; 0 \\
+    \hline
+    0 &amp; -255 &amp; 0 \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_y = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    -255 &amp; -255 &amp; 0 \\
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>The magnitudes are the same but the <em>angles</em> point in the opposite direction,
+as seen below:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\| \Delta I \| = \begin{array}{|c|c|c|}
+    \hline
+    0 &amp; 0 &amp; 0 \\
+    \hline
+    255 &amp; 360 &amp; 0 \\
+    \hline
+    0 &amp; 255 &amp; 0 \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\angle \Delta I = \begin{array}{|c|c|c|}
+    \hline
+    0^\circ &amp; 0^\circ &amp; 0^\circ \\
+    \hline
+    -90^\circ &amp; -135^\circ &amp; 0^\circ \\
+    \hline
+    0^\circ &amp; 180^\circ &amp; 0^\circ \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>Basically, when we inverted the image, the angles also flipped by 180-degrees
+to accomodate.  Because the angles are flipped, the detector can still do the
+non-maximum suppression correctly because it knows what direction is
+perpendicular to an edge.</p>
+</div>
+<div class="section" id="colour-angles">
+<h3>Colour Angles<a class="headerlink" href="#colour-angles" title="Permalink to this headline">¶</a></h3>
+<p>Here’s where things get tricky.  First, remember that the goal is to figure out
+the strength of an edge (i.e. magnitude) as well as its orientation (angle).  As
+long as we can do that, we can use the Canny edge detector.</p>
+<p>Let’s now look at a colour example, similar to the original greyscale example
+but with yellow and red instead of black and white.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{|c|c|c|}
+    \hline
+    (255, 0, 0) &amp; (255, 0, 0) &amp; (255, 0, 0) \\
+    \hline
+    (255, 255, 0) &amp; (255, 255, 0) &amp; (255, 0, 0) \\
+    \hline
+    (255, 255, 0) &amp; (255, 255, 0) &amp; (255, 0, 0) \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>If we apply the normal difference filters, we’ll get the follow two images:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_x = \begin{array}{|c|c|c|}
+    \hline
+    (0, 0, 0) &amp; (0, 0, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, 0, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, 0, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_y = \begin{array}{|c|c|c|}
+    \hline
+    (0, 0, 0) &amp; (0, 0, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, -255, 0) &amp; (0, -255, 0) &amp; (0, 0, 0) \\
+    \hline
+    (0, 0, 0) &amp; (0, 0, 0) &amp; (0, 0, 0) \\
+    \hline
+\end{array}.\end{split}\]</div>
+<p>Remember how we computed the magnitude as <span class="math notranslate nohighlight">\(\sqrt{G_x^2 + G_y^2}\)</span> and the
+angle as <span class="math notranslate nohighlight">\(\arctan\left(\frac{G_y}{G_x}\right)\)</span>?  Well, we can’t do that
+any more.  However, when we look at the image, we know, for lack of a better
+term, that you’ve got a horizontal edge (0-degrees) and a vertical edge
+(90-degrees).  We also know that the jump from one colour to another is
+<span class="math notranslate nohighlight">\((0, -255, 0)\)</span>.</p>
+<p>Well, this starts to look a little bit like the vector order statistics that
+we looked at <a class="reference internal" href="vector-order-statistics.html"><span class="doc">before</span></a>.  It’s not unreasonable to
+say that the size of the jump is <span class="math notranslate nohighlight">\(d\bigl((255, 255, 0), (255, 0, 0)\bigr) = 255\)</span>.
+So, that’s a good starting point.  We can now generate a gradient magnitude
+image <span class="math notranslate nohighlight">\(\| \Delta I \|\)</span> for colour images.</p>
+<p>To make things a bit more concrete, consider the following image:</p>
+<div class="figure" id="id12">
+<img alt="_images/elgin-cropped.jpg" src="_images/elgin-cropped.jpg" />
+<p class="caption"><span class="caption-text">Example image.</span></p>
+</div>
+<p>Let’s apply the following operation</p>
+<div class="math notranslate nohighlight">
+\[\| \Delta I \| = \max\left(d(G_x), d(G_y)\right)\]</div>
+<p>to all pixels.  All that we’re doing is taking the maximum response between the
+horizontal and vertical differences.  This is what the output looks like:</p>
+<div class="figure" id="id13">
+<img alt="_images/elgin-grad-mag.jpg" src="_images/elgin-grad-mag.jpg" />
+<p class="caption"><span class="caption-text">Colour gradient magnitudes.</span></p>
+</div>
+<p>So far so good, but what about the angle?  We lose the sign when taking the
+vector norm, because, <strong>by definition</strong></p>
+<div class="math notranslate nohighlight">
+\[d(\vec{x}) \ge 0 \ \forall \ \vec{x}.\]</div>
+<p>That means that we don’t know if the edge is, for example, from left-to-right or
+right-to-left.</p>
+<p>Is this a problem?  Nope!  We don’t actually care which direction that edge
+arrow points.  As long as its 90-degrees to the edge, who cares?  In fact, this
+is the same assumption that the Canny detector’s NMS step makes.  The way around
+this is to sample around a pixel in <em>multiple</em> steps.  Specifically, this
+pattern, in this order</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}0^\circ = \begin{array}{|c|c|c|}
+    \hline
+    \  &amp; \  &amp; \  \\
+    \hline
+    - &amp; \star &amp; + \\
+    \hline
+    \  &amp; \  &amp; \  \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}90^\circ = \begin{array}{|c|c|c|}
+    \hline
+    \  &amp; + &amp; \  \\
+    \hline
+    \  &amp; \star &amp; \  \\
+    \hline
+    \  &amp; -  &amp; \  \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}45^\circ = \begin{array}{|c|c|c|}
+    \hline
+    \  &amp; \     &amp; + \\
+    \hline
+    \  &amp; \star &amp; \  \\
+    \hline
+    - &amp;  \     &amp; \  \\
+    \hline
+\end{array}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}135^\circ = \begin{array}{|c|c|c|}
+    \hline
+    - &amp; \     &amp; \  \\
+    \hline
+    \  &amp; \star &amp; \  \\
+    \hline
+    \  &amp; \     &amp; + \\
+    \hline
+\end{array}\end{split}\]</div>
+<p>The final gradient, magnitude <strong>and</strong> direction, is formally defined as</p>
+<div class="math notranslate nohighlight">
+\[\Delta I = \arg \max_{\theta} \left\{ d(\vec{c}_+, \vec{c}_-) \right\},\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\theta = \left\{ 0, 45, 90, 135 \right\}\]</div>
+<p>and <span class="math notranslate nohighlight">\(\vec{c}_+\)</span> and <span class="math notranslate nohighlight">\(\vec{c}_-\)</span> are the pixel colours sampled at
+the <span class="math notranslate nohighlight">\(+\)</span> and <span class="math notranslate nohighlight">\(-\)</span> positions, respectively.  This is basically a form
+of the Vector Range filter except that it’s not a rectangular window.  The
+reason for the sampling order is that even though there are eight-possible
+angles, four of them are just reflections of the other.  Because we loose the
+sign, we don’t have to compute these twice.</p>
+<p>When you apply this filter, what get looks something like this:</p>
+<div class="figure" id="id14">
+<img alt="_images/elgin-grad.jpg" src="_images/elgin-grad.jpg" />
+<p class="caption"><span class="caption-text">Colour vector gradients encoded using an HSV colour scheme.  The brightness
+corresponds to the magnitude while the colour corresponds to the angle.</span></p>
+</div>
+</div>
+<div class="section" id="closing-the-loop">
+<h3>Closing the Loop<a class="headerlink" href="#closing-the-loop" title="Permalink to this headline">¶</a></h3>
+<p>Once we have colour gradients, in the same form expected by the Canny edge
+detector, we’re mostly done.  The main change, at least in the implementation
+accompanying this document, is that the gradients are stored in polar, or
+magnitude-angle, form rather than in <span class="math notranslate nohighlight">\((\partial x, \partial y)\)</span> form.
+This is a fairly minor change and mainly to simplify the overall implementation.</p>
+<p>If this were to be used with another implementation, e.g. OpenCV’s
+<a class="reference external" href="https://docs.opencv.org/3.4.2/dd/d1a/group__imgproc__feature.html#ga2a671611e104c093843d7b7fc46d24af">Canny() function</a>,
+then you can convert to the Cartesian form by</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\partial x &amp;= \| \Delta I \| \cos \left( \angle \Delta I \right)\\\partial y &amp;= \| \Delta I \| \sin \left( \angle \Delta I \right),\end{aligned}\end{align} \]</div>
+<p>which is a standard polar-to-rectangular conversion.  The final result of the
+colour-augmented Canny edge detector is</p>
+<div class="figure" id="id15">
+<img alt="_images/elgin-edges.png" src="_images/elgin-edges.png" />
+<p class="caption"><span class="caption-text">Resulting edge map from the previously generated colour gradients.  The
+detector settings were <span class="math notranslate nohighlight">\(\sigma = 2\)</span> and
+<span class="math notranslate nohighlight">\(th = \left[10, 20 \right]\)</span>.</span></p>
+</div>
+</div>
+</div>
+<div class="section" id="other-methods">
+<h2>Other Methods<a class="headerlink" href="#other-methods" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned at the start, there has already been work into looking at
+determining edges from colour images.  There’s the vector order statistics
+work by Lukac et al. <a class="reference internal" href="references.html#lukac2005" id="id7">[lukac2005]</a> and discussed in-depth in the
+<a class="reference internal" href="vector-order-statistics.html"><span class="doc">Vector Order Statistics</span></a> section.  As well, there is work by
+Scharcanski and Venetsanopolous <a class="reference internal" href="references.html#scharcanski1997" id="id8">[scharcanski1997]</a> which was the basis for this
+section.</p>
+<p>There’s also the work by Ruzon and Tomasi <a class="reference internal" href="references.html#ruzon2001" id="id9">[ruzon2001]</a> on finding various
+low-level image features (edge, t-junctions and corners) all using the same
+colour-based framework.  They do something similar to what was described in this
+section, sampling various angles around a pixel but they use a completely
+different distance measure.  Rather than using a vector norm like Euclidean
+distance, they instead use something called
+<a class="reference external" href="https://en.wikipedia.org/wiki/Earth_mover%27s_distance">Earth Mover’s Distance</a>
+(EMD).  EMD measures how much “effort” is required to move between two
+distributions.  The idea is a bit abstract but one way to think about it is if
+you have a bunch of red-ish pixels and a bunch of green-ish pixels, it’s the
+amount of effort to go from red to green.</p>
+<p>Another approach, which was developed by Kypriandis and Dollner
+<a class="reference internal" href="references.html#kyprianidis2008" id="id10">[kyprianidis2008]</a>, was used for image stylization.  Their approach was based in
+vector calculus so that the partial derivative of a colour image was defined as</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial I}{\partial x} = \begin{bmatrix}
+    \frac{\partial R}{\partial x} &amp;
+    \frac{\partial G}{\partial x} &amp;
+    \frac{\partial B}{\partial x}
+\end{bmatrix}^T\]</div>
+<p>for the horizontal derivative and</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial I}{\partial y} = \begin{bmatrix}
+    \frac{\partial R}{\partial y} &amp;
+    \frac{\partial G}{\partial y} &amp;
+    \frac{\partial B}{\partial y}
+\end{bmatrix}^T\]</div>
+<p>for the vertical.  This allows them to construct something called a structure
+tensor <a class="reference internal" href="references.html#dizenzo1986" id="id11">[dizenzo1986]</a> which can be decomposed to find the directions of an edge.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>More advanced schemes use something called “steerable filters” where,
+among other things, you can adjust the angle of the edge detector.
+This provides better resolution of edges that may not be near vertical
+or horizontal angles.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[2]</a></td><td>I use the term “loosely” because partial derivatives are defined for
+<em>continuous</em> multi-dimensional functions, which is what calculus is
+meant to work with.  Images are defined on a discrete lattice (i.e.
+grid) so calculus doesn’t <em>quite</em> apply. Instead, a lot of operations
+are more naturally defined in terms of linear algebra.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>This is usually calculated using the <a class="reference external" href="https://en.wikipedia.org/wiki/Atan2">atan2() function</a>
+since it ensures that the angle is calculated correctly.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="vector-order-statistics.html" class="btn btn-neutral" title="Vector Order Statistics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Richard Rzeszutek.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
