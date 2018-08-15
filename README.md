@@ -8,7 +8,7 @@ typically involves converting the colour image into greyscale and performing an
 edge detection on **that**.  Now, that isn't to say that RGB edge detectors
 don't exist, only that using them requires some custom implementation work.  It
 also doesn't help that they way in which they're presented can be a bit
-daunting.  More details can be found in the [documentation](docs/).
+daunting.  More details can be found in the [documentation](https://richengguy.github.io/chromavec/).
 
 The point of chromavec is to go from a full-colour image like this
 
