@@ -32,8 +32,9 @@ colour."
 
 ## Building
 
-chromavec uses a CMake-based build system.  Building the library and test
-applications is straightforward:
+Chromavec uses a standard CMake project to manage the build process.  Provided
+that the dependencies are available, creating a release build is
+straightforward:
 
 ```
 $ mkdir build
@@ -50,10 +51,32 @@ Flag                 | Default   | Description
 CHROMAVEC_BUILD_APPS | ON        | Build the CLI apps.
 CHROMAVEC_BUILD_DOCS | OFF       | Build the chromavec documentation.
 
-To build the documentation, enable the documentation flag and then execute:
+To build the documentation, enable the documentation flag and then run:
 
 ```
 $ make docs
+```
+
+### Build Environment with Conda
+
+To make setting up the build environment simpler, a
+[conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file)
+has been provided alongside the source code.  To create the environment:
+
+```
+$ conda env create
+```
+
+Once the dependencies have been retrieved, activate the environment by:
+
+```
+$ conda activate chromavec
+```
+
+It can be similarly deactivated by:
+
+```
+$ conda deactivate
 ```
 
 ### Dependencies

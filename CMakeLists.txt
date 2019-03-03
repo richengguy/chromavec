@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6.0)
-project(chromavec VERSION 1.0.0)
+project(chromavec VERSION 1.0.1)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

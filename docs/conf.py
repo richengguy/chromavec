@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'chromavec'
-copyright = '2018, Richard Rzeszutek'
+copyright = '2018-2019, Richard Rzeszutek'
 author = 'Richard Rzeszutek'
 
 # The short X.Y version

@@ -1,0 +1,7 @@
+name: chromavec
+channels:
+  - conda-forge
+  - default
+dependencies:
+  - cmake=3.12
+  - opencv=3.4.2
