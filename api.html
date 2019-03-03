@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; chromavec 1.0.0 documentation</title>
+  <title>API &mdash; chromavec 1.0.1 documentation</title>
   
 
   
@@ -17,34 +17,37 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="References" href="references.html" />
     <link rel="prev" title="Colour Gradients" href="colour-gradients.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -163,26 +166,26 @@ All of the utilities and functions reside within the <code class="docutils liter
 <div class="section" id="filtering-functions">
 <h2>Filtering Functions<a class="headerlink" href="#filtering-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="enum">
-<dt id="_CPPv3N9chromavec12GradientModeE">
-<span id="_CPPv2N9chromavec12GradientModeE"></span><em class="property">enum </em><code class="descname">GradientMode</code><a class="headerlink" href="#_CPPv3N9chromavec12GradientModeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec12GradientModeE">
+<span id="_CPPv3N9chromavec12GradientModeE"></span><span id="_CPPv2N9chromavec12GradientModeE"></span><em class="property">enum </em><code class="descname">GradientMode</code><a class="headerlink" href="#_CPPv4N9chromavec12GradientModeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Enums that define the set of output modes for the
-<a class="reference internal" href="#_CPPv3N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode" title="chromavec::ColourVectorGradientFilter"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColourVectorGradientFilter()</span></code></a>.</p>
+<a class="reference internal" href="#_CPPv4N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode" title="chromavec::ColourVectorGradientFilter"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ColourVectorGradientFilter()</span></code></a>.</p>
 <dl class="enum">
-<dt id="_CPPv3N9chromavec12GradientMode13kDirectOutputE">
-<span id="_CPPv2N9chromavec12GradientMode13kDirectOutputE"></span><em class="property">enum </em><code class="descname">kDirectOutput</code><a class="headerlink" href="#_CPPv3N9chromavec12GradientMode13kDirectOutputE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec12GradientMode13kDirectOutputE">
+<span id="_CPPv3N9chromavec12GradientMode13kDirectOutputE"></span><span id="_CPPv2N9chromavec12GradientMode13kDirectOutputE"></span><em class="property">enum </em><code class="descname">kDirectOutput</code><a class="headerlink" href="#_CPPv4N9chromavec12GradientMode13kDirectOutputE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Output a raw gradient image that is identical to what is passed internally
 within the chromavec library.</p>
 </dd></dl>
 
 <dl class="enum">
-<dt id="_CPPv3N9chromavec12GradientMode14kMagnitudeOnlyE">
-<span id="_CPPv2N9chromavec12GradientMode14kMagnitudeOnlyE"></span><em class="property">enum </em><code class="descname">kMagnitudeOnly</code><a class="headerlink" href="#_CPPv3N9chromavec12GradientMode14kMagnitudeOnlyE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec12GradientMode14kMagnitudeOnlyE">
+<span id="_CPPv3N9chromavec12GradientMode14kMagnitudeOnlyE"></span><span id="_CPPv2N9chromavec12GradientMode14kMagnitudeOnlyE"></span><em class="property">enum </em><code class="descname">kMagnitudeOnly</code><a class="headerlink" href="#_CPPv4N9chromavec12GradientMode14kMagnitudeOnlyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Output the gradient magnitude image, scaled to be within 0 to 255.</p>
 </dd></dl>
 
 <dl class="enum">
-<dt id="_CPPv3N9chromavec12GradientMode6kToHSVE">
-<span id="_CPPv2N9chromavec12GradientMode6kToHSVE"></span><em class="property">enum </em><code class="descname">kToHSV</code><a class="headerlink" href="#_CPPv3N9chromavec12GradientMode6kToHSVE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec12GradientMode6kToHSVE">
+<span id="_CPPv3N9chromavec12GradientMode6kToHSVE"></span><span id="_CPPv2N9chromavec12GradientMode6kToHSVE"></span><em class="property">enum </em><code class="descname">kToHSV</code><a class="headerlink" href="#_CPPv4N9chromavec12GradientMode6kToHSVE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Output the gradient as an RGB image with HSV colouring.  The gradient
 magnitude will be the value while the angle will be in the hue.</p>
 </dd></dl>
@@ -190,8 +193,8 @@ magnitude will be the value while the angle will be in the hue.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec18VectorMedianFilterERKN2cv3MatEKi">
-<span id="_CPPv2N9chromavec18VectorMedianFilterERKN2cv3MatEKi"></span><span id="chromavec::VectorMedianFilter__cv::MatCR.iC"></span>cv::Mat <code class="descname">VectorMedianFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>window</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec18VectorMedianFilterERKN2cv3MatEKi" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec18VectorMedianFilterERKN2cv3MatEKi">
+<span id="_CPPv3N9chromavec18VectorMedianFilterERKN2cv3MatEKi"></span><span id="_CPPv2N9chromavec18VectorMedianFilterERKN2cv3MatEKi"></span><span id="chromavec::VectorMedianFilter__cv::MatCR.iC"></span>cv::Mat <code class="descname">VectorMedianFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>window</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec18VectorMedianFilterERKN2cv3MatEKi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Applies the Vector Median Filter onto an image.  This is a noise reduction
 filter that is quite similar to the standard median filter.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -212,8 +215,8 @@ filter that is quite similar to the standard median filter.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec17VectorRangeFilterERKN2cv3MatEKi">
-<span id="_CPPv2N9chromavec17VectorRangeFilterERKN2cv3MatEKi"></span><span id="chromavec::VectorRangeFilter__cv::MatCR.iC"></span>cv::Mat <code class="descname">VectorRangeFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>window</em> = 5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec17VectorRangeFilterERKN2cv3MatEKi" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec17VectorRangeFilterERKN2cv3MatEKi">
+<span id="_CPPv3N9chromavec17VectorRangeFilterERKN2cv3MatEKi"></span><span id="_CPPv2N9chromavec17VectorRangeFilterERKN2cv3MatEKi"></span><span id="chromavec::VectorRangeFilter__cv::MatCR.iC"></span>cv::Mat <code class="descname">VectorRangeFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>window</em> = 5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec17VectorRangeFilterERKN2cv3MatEKi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Applies the Vector Range Filter onto an image.  The vector range filter is
 a type of edge detector that returns the distance between the most and
 least central RGB vector in a window.</p>
@@ -235,8 +238,8 @@ least central RGB vector in a window.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi">
-<span id="_CPPv2N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi"></span><span id="chromavec::MinimumVectorDispersionFilter__cv::MatCR.iC.iC.iC"></span>cv::Mat <code class="descname">MinimumVectorDispersionFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>k</em> = 3, <em class="property">const</em> int <em>l</em> = 4, <em class="property">const</em> int <em>window</em> = 5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi">
+<span id="_CPPv3N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi"></span><span id="_CPPv2N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi"></span><span id="chromavec::MinimumVectorDispersionFilter__cv::MatCR.iC.iC.iC"></span>cv::Mat <code class="descname">MinimumVectorDispersionFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> int <em>k</em> = 3, <em class="property">const</em> int <em>l</em> = 4, <em class="property">const</em> int <em>window</em> = 5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec29MinimumVectorDispersionFilterERKN2cv3MatEKiKiKi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Minimum Vector Dispersion Filter is a combination between the VMF and
 VRF filters.  The output of the filter is the distance between the average
 <code class="docutils literal notranslate"><span class="pre">k</span></code> most-central vectors and the <code class="docutils literal notranslate"><span class="pre">l</span></code> least-central vectors.  This has a
@@ -261,8 +264,8 @@ sensitive to noise in the image.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode">
-<span id="_CPPv2N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode"></span><span id="chromavec::ColourVectorGradientFilter__cv::MatCR.doubleC.GradientModeC"></span>cv::Mat <code class="descname">ColourVectorGradientFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> double <em>sigma</em> = 0, <em class="property">const</em> <a class="reference internal" href="#_CPPv3N9chromavec12GradientModeE" title="chromavec::GradientMode">GradientMode</a> <em>mode</em> = kToHSV<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode">
+<span id="_CPPv3N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode"></span><span id="_CPPv2N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode"></span><span id="chromavec::ColourVectorGradientFilter__cv::MatCR.doubleC.GradientModeC"></span>cv::Mat <code class="descname">ColourVectorGradientFilter</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> double <em>sigma</em> = 0, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N9chromavec12GradientModeE" title="chromavec::GradientMode">GradientMode</a> <em>mode</em> = kToHSV<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec26ColourVectorGradientFilterERKN2cv3MatEKdK12GradientMode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -282,8 +285,8 @@ sensitive to noise in the image.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd">
-<span id="_CPPv2N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd"></span><span id="chromavec::ColourCannyEdgeDetect__cv::MatCR.doubleC.doubleC.doubleC"></span>cv::Mat <code class="descname">ColourCannyEdgeDetect</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> double <em>t1</em>, <em class="property">const</em> double <em>t2</em>, <em class="property">const</em> double <em>sigma</em> = 3.0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd">
+<span id="_CPPv3N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd"></span><span id="_CPPv2N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd"></span><span id="chromavec::ColourCannyEdgeDetect__cv::MatCR.doubleC.doubleC.doubleC"></span>cv::Mat <code class="descname">ColourCannyEdgeDetect</code><span class="sig-paren">(</span><em class="property">const</em> cv::Mat &amp;<em>img</em>, <em class="property">const</em> double <em>t1</em>, <em class="property">const</em> double <em>t2</em>, <em class="property">const</em> double <em>sigma</em> = 3.0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec21ColourCannyEdgeDetectERKN2cv3MatEKdKdKd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Perform Canny-style edge detection using colour gradients.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -307,32 +310,32 @@ sensitive to noise in the image.</p>
 below, that is generated at build time.  This is automatically included in the
 main library header.</p>
 <dl class="class">
-<dt id="_CPPv3N9chromavec7VersionE">
-<span id="_CPPv2N9chromavec7VersionE"></span><span id="chromavec::Version"></span><em class="property">class </em><code class="descname">Version</code><a class="headerlink" href="#_CPPv3N9chromavec7VersionE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The <a class="reference internal" href="#_CPPv3N9chromavec7VersionE" title="chromavec::Version"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Version</span></code></a> struct provides version information about the chromavec
+<dt id="_CPPv4N9chromavec7VersionE">
+<span id="_CPPv3N9chromavec7VersionE"></span><span id="_CPPv2N9chromavec7VersionE"></span><span id="chromavec::Version"></span><em class="property">class </em><code class="descname">Version</code><a class="headerlink" href="#_CPPv4N9chromavec7VersionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="#_CPPv4N9chromavec7VersionE" title="chromavec::Version"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Version</span></code></a> struct provides version information about the chromavec
 library.  The values that it provides are filled in at build time and they
 follow <a class="reference external" href="https://semver.org/">semver</a> convention.</p>
 <dl class="member">
-<dt id="_CPPv3N9chromavec7Version5majorE">
-<span id="_CPPv2N9chromavec7Version5majorE"></span><span id="chromavec::Version::major__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">major</code><a class="headerlink" href="#_CPPv3N9chromavec7Version5majorE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec7Version5majorE">
+<span id="_CPPv3N9chromavec7Version5majorE"></span><span id="_CPPv2N9chromavec7Version5majorE"></span><span id="chromavec::Version::major__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">major</code><a class="headerlink" href="#_CPPv4N9chromavec7Version5majorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Major version number.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv3N9chromavec7Version5minorE">
-<span id="_CPPv2N9chromavec7Version5minorE"></span><span id="chromavec::Version::minor__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">minor</code><a class="headerlink" href="#_CPPv3N9chromavec7Version5minorE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec7Version5minorE">
+<span id="_CPPv3N9chromavec7Version5minorE"></span><span id="_CPPv2N9chromavec7Version5minorE"></span><span id="chromavec::Version::minor__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">minor</code><a class="headerlink" href="#_CPPv4N9chromavec7Version5minorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Minor version number.</p>
 </dd></dl>
 
 <dl class="member">
-<dt id="_CPPv3N9chromavec7Version5patchE">
-<span id="_CPPv2N9chromavec7Version5patchE"></span><span id="chromavec::Version::patch__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">patch</code><a class="headerlink" href="#_CPPv3N9chromavec7Version5patchE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec7Version5patchE">
+<span id="_CPPv3N9chromavec7Version5patchE"></span><span id="_CPPv2N9chromavec7Version5patchE"></span><span id="chromavec::Version::patch__i"></span><em class="property">static</em> <em class="property">constexpr</em> int <code class="descname">patch</code><a class="headerlink" href="#_CPPv4N9chromavec7Version5patchE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Patch version number.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv3N9chromavec7Version8ToStringEv">
-<span id="_CPPv2N9chromavec7Version8ToStringEv"></span><span id="chromavec::Version::ToString"></span><em class="property">static</em> std::string <code class="descname">ToString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N9chromavec7Version8ToStringEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9chromavec7Version8ToStringEv">
+<span id="_CPPv3N9chromavec7Version8ToStringEv"></span><span id="_CPPv2N9chromavec7Version8ToStringEv"></span><span id="chromavec::Version::ToString"></span><em class="property">static</em> std::string <code class="descname">ToString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9chromavec7Version8ToStringEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the version information as a string.  The string will be in
 <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</span></code> form.</p>
 </dd></dl>
@@ -353,7 +356,7 @@ follow <a class="reference external" href="https://semver.org/">semver</a> conve
         <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="colour-gradients.html" class="btn btn-neutral" title="Colour Gradients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="colour-gradients.html" class="btn btn-neutral float-left" title="Colour Gradients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -362,7 +365,7 @@ follow <a class="reference external" href="https://semver.org/">semver</a> conve
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Richard Rzeszutek.
+        &copy; Copyright 2018-2019, Richard Rzeszutek
 
     </p>
   </div>
@@ -379,33 +382,16 @@ follow <a class="reference external" href="https://semver.org/">semver</a> conve
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.0.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

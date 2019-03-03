@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'chromavec'
-copyright = '2018, Richard Rzeszutek'
+copyright = '2018-2019, Richard Rzeszutek'
 author = 'Richard Rzeszutek'
 
 # The short X.Y version
 version = '1.0'
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '1.0.1'
 
 
 # -- General configuration ---------------------------------------------------
